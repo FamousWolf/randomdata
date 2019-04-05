@@ -1,0 +1,18 @@
+{
+  "name": "wind/randomdata",
+  "description": "Random test data generator",
+  "type": "typo3-cms-extension",
+  "require": {
+    "typo3/cms": "8.7.*",
+    "fzaninotto/faker": "^1.8"
+  },
+  "replace": {
+    "randomdata": "self.version",
+    "typo3-ter/randomdata": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "WIND\\Randomdata\\": "Classes/"
+    }
+  }
+}
