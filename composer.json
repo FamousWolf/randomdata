@@ -2,6 +2,7 @@
   "name": "windinternet/randomdata",
   "description": "TYPO3 extensions to generate new random data or replace existing data with random data",
   "type": "typo3-cms-extension",
+  "license": "GPL-3.0-or-later",
   "require": {
     "typo3/cms-core": "^8.7 || ^9.5",
     "fzaninotto/faker": "^1.8"
