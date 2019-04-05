@@ -16,6 +16,7 @@ namespace WIND\Randomdata\Service;
 
 use Faker\Factory;
 use Faker\Generator;
+use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -46,9 +47,9 @@ class RandomdataService
     protected $configuration;
 
     /**
-     * @var bool
+     * @var OutputInterface
      */
-    protected $quiet = false;
+    protected $output;
 
     /**
      * @var DataHandler
@@ -78,7 +79,7 @@ class RandomdataService
      *
      * @param string $configurationFile
      * @param string $locale
-     * @param bool $quiet
+     * @param OutputInterface $output
      * @return void
      * @throws \RuntimeException
      * @throws ConfigurationFileNotFoundException
@@ -92,11 +93,10 @@ class RandomdataService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      */
-    public function generate($configurationFile, $locale, $quiet = false)
+    public function generate($configurationFile, $locale, $output = null)
     {
-        $this->quiet = $quiet;
+        $this->output = $output;
 
-        $GLOBALS['BE_USER']->user['admin'] = true;
         $this->dataHandler = GeneralUtility::makeInstance(DataHandler::class);
 
         $this->faker = Factory::create($locale);
@@ -307,7 +307,6 @@ class RandomdataService
         }
 
         $this->dataHandler->start($dataMap, []);
-        $this->dataHandler->admin = true;
         $this->dataHandler->process_datamap();
 
         if (!empty($this->dataHandler->errorLog)) {
@@ -345,7 +344,6 @@ class RandomdataService
             }
 
             $this->dataHandler->start($dataMap, []);
-            $this->dataHandler->admin = true;
             $this->dataHandler->process_datamap();
 
             if (!empty($this->dataHandler->errorLog)) {
@@ -416,8 +414,8 @@ class RandomdataService
      */
     protected function output($message)
     {
-        if (!$this->quiet) {
-            echo($message . "\n");
+        if (!empty($this->output)) {
+            $this->output->writeln($message);
         }
     }
 }

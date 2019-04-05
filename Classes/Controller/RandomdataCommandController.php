@@ -15,31 +15,49 @@ namespace WIND\Randomdata\Controller;
  */
 
 use Faker\Factory;
-use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
-use \WIND\Randomdata\Exception\ConfigurationFileNotFoundException;
-use \WIND\Randomdata\Exception\FieldsNotFoundForItemException;
-use \WIND\Randomdata\Exception\PidNotFoundForItemException;
-use \WIND\Randomdata\Exception\TableNotFoundInTcaException;
-use \WIND\Randomdata\Exception\UnknownActionException;
-use \WIND\Randomdata\Exception\CountNotFoundForItemException;
-use \WIND\Randomdata\Exception\DataHandlerException;
-use \WIND\Randomdata\Exception\ProviderException;
+use WIND\Randomdata\Exception\ConfigurationFileNotFoundException;
+use WIND\Randomdata\Exception\FieldsNotFoundForItemException;
+use WIND\Randomdata\Exception\PidNotFoundForItemException;
+use WIND\Randomdata\Exception\TableNotFoundInTcaException;
+use WIND\Randomdata\Exception\UnknownActionException;
+use WIND\Randomdata\Exception\CountNotFoundForItemException;
+use WIND\Randomdata\Exception\DataHandlerException;
+use WIND\Randomdata\Exception\ProviderException;
 use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Randomdata Command Controller
  */
-class RandomdataCommandController extends CommandController
+class RandomdataCommandController extends Command
 {
     /**
-     * Generate random data
+     * Configure
      *
-     * @param string $file YAML configuration file
-     * @param string $locale Locale used to generate data
-     * @param bool $quiet Only output errors if true
      * @return void
+     */
+    public function configure()
+    {
+        $this->setDescription('Generate random data');
+        $this->setHelp('This command allows your to create random data or replace existing data with random data');
+        $this->addArgument('file', InputArgument::REQUIRED, 'YAML configuration file');
+        $this->addArgument('locale', InputArgument::OPTIONAL, 'Locale used to generate data', Factory::DEFAULT_LOCALE);
+    }
+
+    /**
+     * Execute
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
      * @throws \RuntimeException
      * @throws ConfigurationFileNotFoundException
      * @throws FieldsNotFoundForItemException
@@ -52,10 +70,13 @@ class RandomdataCommandController extends CommandController
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      */
-    public function generateCommand($file, $locale = Factory::DEFAULT_LOCALE, $quiet = false)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
+        Bootstrap::initializeBackendAuthentication();
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var RandomdataService $randomdataService */
-        $randomdataService = $this->objectManager->get(RandomdataService::class);
-        $randomdataService->generate($file, $locale, $quiet);
+        $randomdataService = $objectManager->get(RandomdataService::class);
+        $randomdataService->generate($input->getArgument('file'), $input->getArgument('locale'), $output);
     }
 }

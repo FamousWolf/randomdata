@@ -15,10 +15,11 @@ After installing randomdata in TYPO3 you can run it using the following command:
 vendor/bin/typo3 randomdata:generate configuration.yaml
 ```
 
-The command has 2 optional parameters:
+For more information about the command line options, use the following command: 
 
-- **--locale** The locale used to generate the data (default: en_US)
-- **--quiet** If set, the command will not display any messages other than errors
+```
+vendor/bin/typo3 help randomdata:generate
+```
 
 The location of the configuration yaml file needs to be inside the site root.
 
