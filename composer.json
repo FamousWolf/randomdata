@@ -1,5 +1,5 @@
 {
-  "name": "wind/randomdata",
+  "name": "windinternet/randomdata",
   "description": "Random test data generator",
   "type": "typo3-cms-extension",
   "require": {
