@@ -198,13 +198,13 @@ class RandomdataService
     {
         $pid = $this->getItemConfigurationValue($itemConfiguration, 'pid');
 
-        if (empty($itemConfiguration['doNotCheckPid']) && $pid === null) {
+        if ($pid === null) {
             throw new PidNotFoundForItemException('PID not set in configuration for item "' . $configurationKey . '"', 1554380141);
         }
 
         $pid = (int)$pid;
 
-        if (empty($itemConfiguration['doNotCheckPid']) && $pid > 0) {
+        if ($pid > 0) {
             /** @var QueryBuilder $pageQueryBuilder */
             $pageQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
             $page = $pageQueryBuilder->count('*')->from('pages')->where(
