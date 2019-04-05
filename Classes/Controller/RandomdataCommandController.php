@@ -16,6 +16,16 @@ namespace WIND\Randomdata\Controller;
 
 use Faker\Factory;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
+use \WIND\Randomdata\Exception\ConfigurationFileNotFoundException;
+use \WIND\Randomdata\Exception\FieldsNotFoundForItemException;
+use \WIND\Randomdata\Exception\PidNotFoundForItemException;
+use \WIND\Randomdata\Exception\TableNotFoundInTcaException;
+use \WIND\Randomdata\Exception\UnknownActionException;
+use \WIND\Randomdata\Exception\CountNotFoundForItemException;
+use \WIND\Randomdata\Exception\DataHandlerException;
+use \WIND\Randomdata\Exception\ProviderException;
 use WIND\Randomdata\Service\RandomdataService;
 
 /**
@@ -31,18 +41,20 @@ class RandomdataCommandController extends CommandController
      * @param bool $quiet Only output errors if true
      * @return void
      * @throws \RuntimeException
-     * @throws \WIND\Randomdata\Exception\ConfigurationFileNotFoundException
-     * @throws \WIND\Randomdata\Exception\FieldsNotFoundForItemException
-     * @throws \WIND\Randomdata\Exception\PidNotFoundForItemException
-     * @throws \WIND\Randomdata\Exception\TableNotFoundInTcaException
-     * @throws \WIND\Randomdata\Exception\UnknownActionException
-     * @throws \WIND\Randomdata\Exception\CountNotFoundForItemException
-     * @throws \WIND\Randomdata\Exception\DataHandlerException
-     * @throws \WIND\Randomdata\Exception\ProviderException
+     * @throws ConfigurationFileNotFoundException
+     * @throws FieldsNotFoundForItemException
+     * @throws PidNotFoundForItemException
+     * @throws TableNotFoundInTcaException
+     * @throws UnknownActionException
+     * @throws CountNotFoundForItemException
+     * @throws DataHandlerException
+     * @throws ProviderException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     public function generateCommand($file, $locale = Factory::DEFAULT_LOCALE, $quiet = false)
     {
-        /** @var \WIND\Randomdata\Service\RandomdataService $randomdataService */
+        /** @var RandomdataService $randomdataService */
         $randomdataService = $this->objectManager->get(RandomdataService::class);
         $randomdataService->generate($file, $locale, $quiet);
     }
