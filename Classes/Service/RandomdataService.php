@@ -119,7 +119,7 @@ class RandomdataService
      */
     protected function loadConfigurationFile($configurationFile)
     {
-        $configurationFile = GeneralUtility::getFileAbsFileName($configurationFile);
+        $configurationFile = GeneralUtility::getFileAbsFileName(realpath($configurationFile));
         if (!is_file($configurationFile)) {
             throw new ConfigurationFileNotFoundException('Configuration file "' . $configurationFile . '" not found', 1554378907);
         }
