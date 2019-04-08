@@ -295,18 +295,31 @@ class RandomdataService
 
         $dataMap = [$table => []];
 
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['cmdMap'] = [];
+
         for ($i = 1; $i <= $count; $i++) {
+            $recordUid = 'NEW' . $i;
             $data = [
                 'pid' => $pid,
             ];
             foreach ($fields as $field => $fieldConfiguration) {
+                $fieldConfiguration['__table'] = $table;
+                $fieldConfiguration['__pid'] = $pid;
+                $fieldConfiguration['__field'] = $field;
+                $fieldConfiguration['__recordUid'] = $recordUid;
+
                 $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid);
             }
 
-            $dataMap[$table]['NEW' . $i] = $data;
+            $dataMap[$table][$recordUid] = $data;
         }
 
-        $this->dataHandler->start($dataMap, []);
+        if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']) && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap'])) {
+            $dataMap = array_merge_recursive($dataMap, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']);
+        }
+
+        $this->dataHandler->start($dataMap, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['cmdMap']);
         $this->dataHandler->process_datamap();
 
         if (!empty($this->dataHandler->errorLog)) {
@@ -334,16 +347,30 @@ class RandomdataService
 
         if (!empty($records)) {
             $dataMap = [$table => []];
+
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap'] = [];
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['cmdMap'] = [];
+
             foreach ($records as $record) {
                 $data = [];
                 foreach ($fields as $field => $fieldConfiguration) {
+                    $fieldConfiguration['__table'] = $table;
+                    $fieldConfiguration['__pid'] = $pid;
+                    $fieldConfiguration['__field'] = $field;
+                    $fieldConfiguration['__recordUid'] = $record['uid'];
+
                     $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid);
                 }
 
                 $dataMap[$table][$record['uid']] = $data;
             }
 
-            $this->dataHandler->start($dataMap, []);
+            if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']) && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap'])) {
+                $dataMap = array_merge_recursive($dataMap, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']);
+            }
+
+            $this->dataHandler->start($dataMap, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['cmdMap']);
+            $this->dataHandler->process_cmdmap();
             $this->dataHandler->process_datamap();
 
             if (!empty($this->dataHandler->errorLog)) {
@@ -387,7 +414,7 @@ class RandomdataService
             $fieldConfiguration['pid'] = $pid;
         }
 
-        return $providerClass::generate($this->faker, $fieldConfiguration);
+        return $providerClass::generate($this->faker, $fieldConfiguration, $this);
     }
 
     /**

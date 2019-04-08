@@ -16,7 +16,9 @@ namespace WIND\Randomdata\Provider;
 
 use Faker\Generator;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Relation Provider
@@ -26,18 +28,19 @@ class RelationProvider implements ProviderInterface
     /**
      * Generate
      *
-     * @param \Faker\Generator $faker
+     * @param Generator $faker
      * @param array $configuration
+     * @param RandomdataService $randomdataService
      * @return string
      */
-    static public function generate(Generator $faker, array $configuration = [])
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
     {
         $configuration = array_merge([
             'minimum' => 0,
             'maximum' => 1,
         ], $configuration);
 
-        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($configuration['table']);
         $queryBuilder->select('uid')->from($configuration['table'])->where(
             $queryBuilder->expr()->eq('pid', (int)$configuration['pid'])

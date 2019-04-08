@@ -15,6 +15,7 @@ namespace WIND\Randomdata\Provider;
  */
 
 use Faker\Generator;
+use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Provider Interface
@@ -24,9 +25,10 @@ interface ProviderInterface
     /**
      * Generate
      *
-     * @param \Faker\Generator $faker
+     * @param Generator $faker
      * @param array $configuration
+     * @param RandomdataService $randomDataService
      * @return mixed
      */
-    static public function generate(Generator $faker, array $configuration = []);
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomDataService);
 }
