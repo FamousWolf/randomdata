@@ -54,11 +54,15 @@ class FileProvider implements ProviderInterface
                 $queryBuilder->expr()->eq('tablenames', (int)$configuration['__table']),
                 $queryBuilder->expr()->eq('fieldname', (int)$configuration['__field'])
             );
-            $rows = $queryBuilder->execute();
+            $rows = $queryBuilder->execute()->fetchAll();
             foreach ($rows as $row) {
-                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['cmdMap']['sys_file_reference'][$row['uid']] = [
-                    'delete' => 1,
-                ];
+                $randomdataService->addToCmdMap([
+                    'sys_file_reference' => [
+                        $row['uid'] => [
+                            'delete' => 1
+                        ]
+                    ]
+                ]);
             }
         }
 
@@ -73,7 +77,7 @@ class FileProvider implements ProviderInterface
                     $references = [];
                     foreach ($files as $file) {
                         $fileObject = $resourceFactory->retrieveFileOrFolderObject($file);
-                        $referenceUid = 'NEW99999' . count($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']['sys_file_reference']);
+                        $referenceUid = $randomdataService->getNewUid();
                         $referenceFieldValues = [
                             'table_local' => 'sys_file',
                             'uid_local' => $fileObject->getUid(),
@@ -85,7 +89,11 @@ class FileProvider implements ProviderInterface
                         foreach ($configuration['referenceFields'] as $referenceField => $referenceFieldConfiguration) {
                             $referenceFieldValues[$referenceField] = $randomdataService->generateData('FileProvider:sys_file_reference', $referenceField, $referenceFieldConfiguration, $configuration['__pid']);
                         }
-                        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['addToDataMap']['sys_file_reference'][$referenceUid] = $referenceFieldValues;
+                        $randomdataService->addToDataMap([
+                            'sys_file_reference' => [
+                                $referenceUid => $referenceFieldValues
+                            ]
+                        ]);
                         $references[] = $referenceUid;
                     }
 
