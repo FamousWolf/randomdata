@@ -41,6 +41,6 @@ class RandomValueProvider implements ProviderInterface
         }
 
         shuffle($configuration['values']);
-        return $configuration['value'][0];
+        return $configuration['values'][0];
     }
 }

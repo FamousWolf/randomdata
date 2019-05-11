@@ -44,8 +44,6 @@ class FileProvider implements ProviderInterface
             'referenceFields' => [],
         ], $configuration);
 
-        // @todo Allow non fal files
-
         if (is_numeric($configuration['__recordUid'])) {
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('sys_file_reference');

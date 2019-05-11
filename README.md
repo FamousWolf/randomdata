@@ -74,7 +74,11 @@ The following providers are available by default:
     - type: The type of e-mail address [email (default), safeEmail, freeEmail, companyEmail]
 - **Emoji**
 - **FileExtension**
-- **File** Just a dummy for now that doesn't do anything yet
+- **File**
+    - minimum: Minimum number
+    - maximum: Maximum number
+    - source: Source directory containing files
+    - referenceFields: Fields in the file reference
 - **FirstName**
     - gender: Gender of the name [null (default), male, female]
 - **FixedValue**
@@ -177,6 +181,15 @@ news:
       table: sys_category
       minimum: 0
       maximum: 5
+    fal_media:
+      provider: File
+      minimum: 0
+      maximum: 1
+      source: fileadmin/randomimages/
+      referenceFields:
+        showinpreview:
+          provider: FixedValue
+          value = 1
     path_segment:
       provider: FixedValue
       value:
@@ -192,6 +205,5 @@ If you need anything other than `insert` or `replace` as action, you can use the
 
 ## @todo / missing features
 
-- **File provider** A provider to add files to records. This should work for FAL fields and non-FAL fields and should allow the creation of at least images, text, PDF and (random) binary files.
 - **HTML provider** A provider to generate HTML data. Perhaps random text filling a template.
 - **Unit tests** Unit tests have to added for all providers.
