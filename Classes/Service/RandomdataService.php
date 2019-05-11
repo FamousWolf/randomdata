@@ -67,6 +67,21 @@ class RandomdataService
     protected $objectManager;
 
     /**
+     * @var array
+     */
+    protected $addToDataMap = [];
+
+    /**
+     * @var array
+     */
+    protected $addToCmdMap = [];
+
+    /**
+     * @var int
+     */
+    protected $newUid = 0;
+
+    /**
      * @param ObjectManager $objectManager
      */
     public function injectObjectManager(ObjectManager $objectManager)
@@ -107,6 +122,39 @@ class RandomdataService
         foreach ($this->configuration as $configurationKey => $itemConfiguration) {
             $this->generateItem($configurationKey, $itemConfiguration);
         }
+    }
+
+    /**
+     * Add to data map
+     *
+     * @param array $dataMap
+     * @return void
+     */
+    public function addToDataMap(array $dataMap)
+    {
+        $this->addToDataMap = array_merge_recursive($this->addToDataMap, $dataMap);
+    }
+
+    /**
+     * Add to cmd map
+     *
+     * @param array $cmdMap
+     * @return void
+     */
+    public function addToCmdMap(array $cmdMap)
+    {
+        $this->addToCmdMap = array_merge_recursive($this->addToCmdMap, $cmdMap);
+    }
+
+    /**
+     * Get new uid
+     *
+     * @return string
+     */
+    public function getNewUid()
+    {
+        $this->newUid++;
+        return 'NEW' . $this->newUid;
     }
 
     /**
@@ -295,18 +343,31 @@ class RandomdataService
 
         $dataMap = [$table => []];
 
+        $this->addToDataMap = [];
+        $this->addToCmdMap = [];
+
         for ($i = 1; $i <= $count; $i++) {
+            $recordUid = $this->getNewUid();
             $data = [
                 'pid' => $pid,
             ];
             foreach ($fields as $field => $fieldConfiguration) {
+                $fieldConfiguration['__table'] = $table;
+                $fieldConfiguration['__pid'] = $pid;
+                $fieldConfiguration['__field'] = $field;
+                $fieldConfiguration['__recordUid'] = $recordUid;
+
                 $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid);
             }
 
-            $dataMap[$table]['NEW' . $i] = $data;
+            $dataMap[$table][$recordUid] = $data;
         }
 
-        $this->dataHandler->start($dataMap, []);
+        if (!empty($this->addToDataMap)) {
+            $dataMap = array_merge_recursive($dataMap, $this->addToDataMap);
+        }
+
+        $this->dataHandler->start($dataMap, $this->addToCmdMap);
         $this->dataHandler->process_datamap();
 
         if (!empty($this->dataHandler->errorLog)) {
@@ -334,16 +395,30 @@ class RandomdataService
 
         if (!empty($records)) {
             $dataMap = [$table => []];
+
+            $this->addToDataMap = [];
+            $this->addToCmdMap = [];
+
             foreach ($records as $record) {
                 $data = [];
                 foreach ($fields as $field => $fieldConfiguration) {
+                    $fieldConfiguration['__table'] = $table;
+                    $fieldConfiguration['__pid'] = $pid;
+                    $fieldConfiguration['__field'] = $field;
+                    $fieldConfiguration['__recordUid'] = $record['uid'];
+
                     $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid);
                 }
 
                 $dataMap[$table][$record['uid']] = $data;
             }
 
-            $this->dataHandler->start($dataMap, []);
+            if (!empty($this->addToDataMap)) {
+                $dataMap = array_merge_recursive($dataMap, $this->addToDataMap);
+            }
+
+            $this->dataHandler->start($dataMap, $this->addToCmdMap);
+            $this->dataHandler->process_cmdmap();
             $this->dataHandler->process_datamap();
 
             if (!empty($this->dataHandler->errorLog)) {
@@ -387,7 +462,7 @@ class RandomdataService
             $fieldConfiguration['pid'] = $pid;
         }
 
-        return $providerClass::generate($this->faker, $fieldConfiguration);
+        return $providerClass::generate($this->faker, $fieldConfiguration, $this);
     }
 
     /**

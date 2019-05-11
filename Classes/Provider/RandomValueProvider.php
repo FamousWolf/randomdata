@@ -15,6 +15,7 @@ namespace WIND\Randomdata\Provider;
  */
 
 use Faker\Generator;
+use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Random Value Provider
@@ -24,11 +25,12 @@ class RandomValueProvider implements ProviderInterface
     /**
      * Generate
      *
-     * @param \Faker\Generator $faker
+     * @param Generator $faker
      * @param array $configuration
-     * @return mixed
+     * @param RandomdataService $randomdataService
+     * @return string
      */
-    static public function generate(Generator $faker, array $configuration = [])
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
     {
         $configuration = array_merge([
             'values' => [],
@@ -39,6 +41,6 @@ class RandomValueProvider implements ProviderInterface
         }
 
         shuffle($configuration['values']);
-        return $configuration['value'][0];
+        return $configuration['values'][0];
     }
 }

@@ -15,6 +15,7 @@ namespace WIND\Randomdata\Provider;
  */
 
 use Faker\Generator;
+use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Uuid Provider
@@ -24,11 +25,12 @@ class UuidProvider implements ProviderInterface
     /**
      * Generate
      *
-     * @param \Faker\Generator $faker
+     * @param Generator $faker
      * @param array $configuration
+     * @param RandomdataService $randomdataService
      * @return string
      */
-    static public function generate(Generator $faker, array $configuration = [])
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
     {
         return $faker->uuid;
     }

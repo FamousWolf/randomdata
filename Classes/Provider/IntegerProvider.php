@@ -15,6 +15,7 @@ namespace WIND\Randomdata\Provider;
  */
 
 use Faker\Generator;
+use WIND\Randomdata\Service\RandomdataService;
 
 /**
  * Integer Provider
@@ -24,11 +25,12 @@ class IntegerProvider implements ProviderInterface
     /**
      * Generate
      *
-     * @param \Faker\Generator $faker
+     * @param Generator $faker
      * @param array $configuration
-     * @return int
+     * @param RandomdataService $randomdataService
+     * @return string
      */
-    static public function generate(Generator $faker, array $configuration = [])
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
     {
         $configuration = array_merge([
             'minimum' => 0,
