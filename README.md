@@ -189,7 +189,7 @@ news:
       referenceFields:
         showinpreview:
           provider: FixedValue
-          value = 1
+          value: 1
     path_segment:
       provider: FixedValue
       value:
