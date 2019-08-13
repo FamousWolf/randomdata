@@ -160,7 +160,7 @@ news:
   fields:
     title:
       provider: Sentences
-      minimun: 1
+      minimum: 1
       maximum: 1
     teaser:
       provider: Sentences
