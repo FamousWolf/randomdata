@@ -18,9 +18,9 @@ use Faker\Generator;
 use WIND\Randomdata\Service\RandomdataService;
 
 /**
- * Ip Provider
+ * Field Date Time Provider
  */
-class IpProvider implements ProviderInterface
+class FieldDateTimeProvider implements ProviderInterface
 {
     /**
      * Generate
@@ -30,23 +30,24 @@ class IpProvider implements ProviderInterface
      * @param RandomdataService $randomdataService
      * @param array $previousFieldsData
      * @return string
+     * @throws \Exception
      */
     static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService, array $previousFieldsData)
     {
         $configuration = array_merge([
-            'type' => null,
+            'field' => null,
+            'fieldDateFormat' => 'c',
+            'interval' => '+1 day',
+            'timezone' => null,
+            'format' => 'c'
         ], $configuration);
 
-        switch ($configuration['type']) {
-            case 'localIpv4':
-                return $faker->localIpv4;
-                break;
-            case 'ipv6':
-                return $faker->ipv6;
-                break;
-            default:
-                return $faker->ipv4;
-                break;
+        if (!empty($configuration['field']) && !empty($previousFieldsData[$configuration['field']])) {
+            $fieldDate = \DateTime::createFromFormat($configuration['fieldDateFormat'], $previousFieldsData[$configuration['field']]);
+        } else {
+            $fieldDate = new \DateTime();
         }
+
+        return $faker->dateTimeInInterval($fieldDate, $configuration['interval'], $configuration['timezone'])->format($configuration['format']);
     }
 }

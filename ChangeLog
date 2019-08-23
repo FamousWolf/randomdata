@@ -1,0 +1,36 @@
+2019-08-23 Rudy Gnodde
+    * Version 1.0.3
+    * Add field date time provider
+    ! Breaking change: WIND\Randomdata\Provider\ProviderInterface::generate has extra parameter $previousFieldsData
+        Check custom provider classes
+
+2019-08-13 Rudy Gnodde
+    * Fix typo in documentation
+
+2019-05-15 Rudy Gnodde
+    * Fix typo in manual
+
+2019-05-11 Rudy Gnodde
+    * Version 1.0.2
+    * Add file provider and fix bug in random value provider
+
+2019-04-08 Rudy Gnodde
+    * Fix typo in documentation
+
+2019-04-05 Rudy Gnodde
+    * Version 1.0.1
+    * Add TYPO3 9.5 to requirements
+    * Remove useless doNotCheckPid option
+    * Add basic manual
+    * Allow config file from project root instead of public root
+    * Finish documentation
+    * Change annotations
+    * Change composer namespace
+    * Change author
+    * Change description in composer.json
+    * Fix license
+    * Rewrite Extbase Command Controller to Symfony Command Controller
+
+2019-04-05 Rudy Gnodde
+    * Version 1.0.0
+    * Initial release

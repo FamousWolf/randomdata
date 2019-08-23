@@ -73,6 +73,12 @@ The following providers are available by default:
 - **Email**
     - type: The type of e-mail address [email (default), safeEmail, freeEmail, companyEmail]
 - **Emoji**
+- **FieldDateTime**
+    - field: The DateTime field to base this date/time on
+    - fieldFormat: The format as set for the DateTime field
+    - interval: The interval in any valid date/time format
+    - timezone: The timezone
+    - format: The format as set for the PHP date() function
 - **FileExtension**
 - **File**
     - minimum: Minimum number
@@ -202,8 +208,3 @@ You can set your custom provider in the configuration yaml file by setting the f
 
 ## Custom action
 If you need anything other than `insert` or `replace` as action, you can use the `generateItemCustomAction` signal slot. You also need to set your action in the `$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['randomdata']['allowedActions']` array.
-
-## @todo / missing features
-
-- **HTML provider** A provider to generate HTML data. Perhaps random text filling a template.
-- **Unit tests** Unit tests have to added for all providers.

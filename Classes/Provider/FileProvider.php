@@ -33,10 +33,11 @@ class FileProvider implements ProviderInterface
      * @param Generator $faker
      * @param array $configuration
      * @param RandomdataService $randomdataService
+     * @param array $previousFieldsData
      * @return string
      * @throws ProviderException
      */
-    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService, array $previousFieldsData)
     {
         $configuration = array_merge([
             'minimum' => 1,
@@ -85,7 +86,7 @@ class FileProvider implements ProviderInterface
                             'pid' => $configuration['__pid'],
                         ];
                         foreach ($configuration['referenceFields'] as $referenceField => $referenceFieldConfiguration) {
-                            $referenceFieldValues[$referenceField] = $randomdataService->generateData('FileProvider:sys_file_reference', $referenceField, $referenceFieldConfiguration, $configuration['__pid']);
+                            $referenceFieldValues[$referenceField] = $randomdataService->generateData('FileProvider:sys_file_reference', $referenceField, $referenceFieldConfiguration, $configuration['__pid'], $referenceFieldValues[$referenceField]);
                         }
                         $randomdataService->addToDataMap([
                             'sys_file_reference' => [

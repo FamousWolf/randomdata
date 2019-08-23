@@ -28,9 +28,10 @@ class SwiftBicProvider implements ProviderInterface
      * @param Generator $faker
      * @param array $configuration
      * @param RandomdataService $randomdataService
+     * @param array $previousFieldsData
      * @return string
      */
-    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService)
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomdataService, array $previousFieldsData)
     {
         return $faker->swiftBicNumber;
     }

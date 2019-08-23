@@ -357,7 +357,7 @@ class RandomdataService
                 $fieldConfiguration['__field'] = $field;
                 $fieldConfiguration['__recordUid'] = $recordUid;
 
-                $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid);
+                $data[$field] = $this->generateData($configurationKey, $field, $fieldConfiguration, $pid, $data);
             }
 
             $dataMap[$table][$recordUid] = $data;
@@ -434,10 +434,11 @@ class RandomdataService
      * @param string $field
      * @param array $fieldConfiguration
      * @param int $pid
+     * @param $previousFieldsData
      * @return mixed
      * @throws ProviderException
      */
-    public function generateData($configurationKey, $field, array $fieldConfiguration, $pid)
+    public function generateData($configurationKey, $field, array $fieldConfiguration, $pid, array $previousFieldsData = [])
     {
         // Public so it can be used in signal slots
         $provider = $this->getItemConfigurationValue($fieldConfiguration, 'provider');
@@ -462,7 +463,7 @@ class RandomdataService
             $fieldConfiguration['pid'] = $pid;
         }
 
-        return $providerClass::generate($this->faker, $fieldConfiguration, $this);
+        return $providerClass::generate($this->faker, $fieldConfiguration, $this, $previousFieldsData);
     }
 
     /**

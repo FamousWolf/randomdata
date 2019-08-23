@@ -28,7 +28,8 @@ interface ProviderInterface
      * @param Generator $faker
      * @param array $configuration
      * @param RandomdataService $randomDataService
+     * @param array $previousFieldsData
      * @return mixed
      */
-    static public function generate(Generator $faker, array $configuration, RandomdataService $randomDataService);
+    static public function generate(Generator $faker, array $configuration, RandomdataService $randomDataService, array $previousFieldsData);
 }
