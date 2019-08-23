@@ -86,7 +86,7 @@ class FileProvider implements ProviderInterface
                             'pid' => $configuration['__pid'],
                         ];
                         foreach ($configuration['referenceFields'] as $referenceField => $referenceFieldConfiguration) {
-                            $referenceFieldValues[$referenceField] = $randomdataService->generateData('FileProvider:sys_file_reference', $referenceField, $referenceFieldConfiguration, $configuration['__pid'], $referenceFieldValues[$referenceField]);
+                            $referenceFieldValues[$referenceField] = $randomdataService->generateData('FileProvider:sys_file_reference', $referenceField, $referenceFieldConfiguration, $configuration['__pid'], $referenceFieldValues);
                         }
                         $randomdataService->addToDataMap([
                             'sys_file_reference' => [
