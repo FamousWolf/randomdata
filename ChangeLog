@@ -1,3 +1,7 @@
+2019-12-17 Rudy Gnodde
+    * Version 1.0.4
+    * Fix call to generateData in FileProvider
+
 2019-08-23 Rudy Gnodde
     * Version 1.0.3
     * Add field date time provider
