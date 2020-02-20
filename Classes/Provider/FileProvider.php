@@ -15,10 +15,12 @@ namespace WIND\Randomdata\Provider;
  */
 
 use Faker\Generator;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use WIND\Randomdata\Exception\ProviderException;
 use WIND\Randomdata\Service\RandomdataService;
 
@@ -66,7 +68,11 @@ class FileProvider implements ProviderInterface
         }
 
         if (!empty($configuration['source'])) {
-            $sourceAbsolutePath = PATH_site . trim($configuration['source'], '/') . '/';
+            if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9002000) {
+                $sourceAbsolutePath = PATH_site . trim($configuration['source'], '/') . '/';
+            } else {
+                $sourceAbsolutePath = Environment::getPublicPath() . '/' . trim($configuration['source'], '/') . '/';
+            }
             if (is_dir($sourceAbsolutePath)) {
                 $count = $faker->numberBetween($configuration['minimum'], $configuration['maximum']);
                 $files = self::getRandomFiles($sourceAbsolutePath, $count);

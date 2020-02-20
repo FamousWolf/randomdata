@@ -1,3 +1,7 @@
+2020-02-20 Rudy Gnodde
+    * Version 1.0.5
+    * TYPO3 10.2 compatibility
+
 2019-12-17 Rudy Gnodde
     * Version 1.0.4
     * Fix call to generateData in FileProvider

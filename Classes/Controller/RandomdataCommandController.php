@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -57,7 +58,7 @@ class RandomdataCommandController extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|void|null
+     * @return int
      * @throws \RuntimeException
      * @throws ConfigurationFileNotFoundException
      * @throws FieldsNotFoundForItemException
@@ -69,6 +70,7 @@ class RandomdataCommandController extends Command
      * @throws ProviderException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws Exception
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -78,5 +80,7 @@ class RandomdataCommandController extends Command
         /** @var RandomdataService $randomdataService */
         $randomdataService = $objectManager->get(RandomdataService::class);
         $randomdataService->generate($input->getArgument('file'), $input->getArgument('locale'), $output);
+
+        return 0;
     }
 }
