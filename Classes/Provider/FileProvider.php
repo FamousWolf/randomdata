@@ -68,11 +68,12 @@ class FileProvider implements ProviderInterface
         }
 
         if (!empty($configuration['source'])) {
-            if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9002000) {
+            if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 9002000) {
                 $sourceAbsolutePath = PATH_site . trim($configuration['source'], '/') . '/';
             } else {
                 $sourceAbsolutePath = Environment::getPublicPath() . '/' . trim($configuration['source'], '/') . '/';
             }
+
             if (is_dir($sourceAbsolutePath)) {
                 $count = $faker->numberBetween($configuration['minimum'], $configuration['maximum']);
                 $files = self::getRandomFiles($sourceAbsolutePath, $count);

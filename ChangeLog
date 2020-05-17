@@ -1,3 +1,11 @@
+2020-05-17 Rudy Gnodde
+    * Version 1.0.7
+    * Fix bug in FileProvider
+
+2020-05-16 Rudy Gnodde
+    * Version 1.0.6
+    * TYPO3 10.4 compatibility
+
 2020-02-20 Rudy Gnodde
     * Version 1.0.5
     * TYPO3 10.2 compatibility
