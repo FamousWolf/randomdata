@@ -8,12 +8,16 @@
     "fzaninotto/faker": "^1.8"
   },
   "replace": {
-    "randomdata": "self.version",
     "typo3-ter/randomdata": "self.version"
   },
   "autoload": {
     "psr-4": {
       "WIND\\Randomdata\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "randomdata"
     }
   }
 }
