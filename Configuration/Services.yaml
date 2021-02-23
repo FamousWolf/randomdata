@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+  WIND\Randomdata\:
+    resource: '../Classes/*'
+  WIND\Randomdata\Controller\RandomdataCommandController:
+    tags:
+      - name: 'console.command'
+        command: 'randomdata:generate'
+        description: 'Generate random data'
+        schedulable: false

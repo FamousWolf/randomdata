@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -74,11 +75,10 @@ class RandomdataCommandController extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (version_compare(TYPO3_version, '9.0.0', '>=')) {
+        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) >= 9002000) {
             Bootstrap::initializeBackendAuthentication();
         } else {
-            $bootstrap = Bootstrap::getInstance();
-            $bootstrap->initializeBackendAuthentication();
+            Bootstrap::getInstance()->initializeBackendAuthentication();
         }
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
