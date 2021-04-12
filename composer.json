@@ -4,7 +4,7 @@
   "type": "typo3-cms-extension",
   "license": "GPL-3.0-or-later",
   "require": {
-    "typo3/cms-core": "^8.7.32 || ^9.5.17 || ^10.4.12 || ^11.1.0",
+    "typo3/cms-core": "^8.7.32 || ^9.5.25 || ^10.4.14 || ^11.1.1",
     "fzaninotto/faker": "^1.8"
   },
   "replace": {
