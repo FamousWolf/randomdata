@@ -68,11 +68,7 @@ class FileProvider implements ProviderInterface
         }
 
         if (!empty($configuration['source'])) {
-            if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) < 9002000) {
-                $sourceAbsolutePath = PATH_site . trim($configuration['source'], '/') . '/';
-            } else {
-                $sourceAbsolutePath = Environment::getPublicPath() . '/' . trim($configuration['source'], '/') . '/';
-            }
+            $sourceAbsolutePath = Environment::getPublicPath() . '/' . trim($configuration['source'], '/') . '/';
 
             if (is_dir($sourceAbsolutePath)) {
                 $count = $faker->numberBetween($configuration['minimum'], $configuration['maximum']);
