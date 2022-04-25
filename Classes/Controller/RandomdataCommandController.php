@@ -74,12 +74,7 @@ class RandomdataCommandController extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (version_compare(TYPO3_version, '9.0.0', '>=')) {
-            Bootstrap::initializeBackendAuthentication();
-        } else {
-            $bootstrap = Bootstrap::getInstance();
-            $bootstrap->initializeBackendAuthentication();
-        }
+        Bootstrap::initializeBackendAuthentication();
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var RandomdataService $randomdataService */

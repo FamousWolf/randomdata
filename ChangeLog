@@ -1,3 +1,8 @@
+2021-02-23 Rudy Gnodde <info@windinternet.nl>
+    * Version 1.1.0
+    * TYPO3 11 compatibility
+    ! No longer compatible with TYPO3 8.7
+
 2021-02-11 Rudy Gnodde
     * Version 1.0.8
     * Fix TYPO3 8.7 compatibility
