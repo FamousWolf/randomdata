@@ -116,8 +116,14 @@ class RandomdataService
 
         $this->faker = Factory::create($locale);
 
-        $this->output('Loading configuration file "' . $configurationFile . '"');
-        $this->loadConfigurationFile($configurationFile);
+        $this->outputWthoutNewLine('Loading configuration file "' . $configurationFile . '" ...');
+        try {
+            $this->loadConfigurationFile($configurationFile);
+        } catch(\Throwable $e) {
+            $this->output(' <fg=red>FAIL</>');
+            throw $e;
+        }
+        $this->output(' <fg=green>OK</>');
 
         foreach ($this->configuration as $configurationKey => $itemConfiguration) {
             $this->generateItem($configurationKey, $itemConfiguration);
@@ -194,23 +200,29 @@ class RandomdataService
      */
     protected function generateItem($configurationKey, array $itemConfiguration)
     {
-        $this->output('Generating data for item "' . $configurationKey . '"');
-        $table = $this->getItemTable($configurationKey, $itemConfiguration);
-        $pid = $this->getItemPid($configurationKey, $itemConfiguration);
-        $action = $this->getItemAction($configurationKey, $itemConfiguration);
-        $fields = $this->getItemFields($configurationKey, $itemConfiguration);
+        $this->outputWthoutNewLine('Generating data for item "' . $configurationKey . '" ...');
+        try {
+            $table = $this->getItemTable($configurationKey, $itemConfiguration);
+            $pid = $this->getItemPid($configurationKey, $itemConfiguration);
+            $action = $this->getItemAction($configurationKey, $itemConfiguration);
+            $fields = $this->getItemFields($configurationKey, $itemConfiguration);
 
-        switch ($action) {
-            case 'insert':
-                $this->generateAndInsertRecords($configurationKey, $table, $pid, $fields, $itemConfiguration);
-                break;
-            case 'replace':
-                $this->generateAndReplaceRecords($configurationKey, $table, $pid, $fields, $itemConfiguration);
-                break;
-            default:
-                $this->dispatchSignalSlot('generateItemCustomAction', [$configurationKey, $table, $pid, $action, $fields, $itemConfiguration, $this]);
-                break;
+            switch ($action) {
+                case 'insert':
+                    $this->generateAndInsertRecords($configurationKey, $table, $pid, $fields, $itemConfiguration);
+                    break;
+                case 'replace':
+                    $this->generateAndReplaceRecords($configurationKey, $table, $pid, $fields, $itemConfiguration);
+                    break;
+                default:
+                    $this->dispatchSignalSlot('generateItemCustomAction', [$configurationKey, $table, $pid, $action, $fields, $itemConfiguration, $this]);
+                    break;
+            }
+        } catch(\Throwable $e) {
+            $this->output(' <fg=red>FAIL</>');
+            throw $e;
         }
+        $this->output(' <fg=green>OK</>');
     }
 
     /**
@@ -492,6 +504,13 @@ class RandomdataService
     {
         if (!empty($this->output)) {
             $this->output->writeln($message);
+        }
+    }
+
+    protected function outputWthoutNewLine($message)
+    {
+        if (!empty($this->output)) {
+            $this->output->write($message);
         }
     }
 }
