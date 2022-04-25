@@ -116,7 +116,7 @@ class RandomdataService
 
         $this->faker = Factory::create($locale);
 
-        $this->outputWthoutNewLine('Loading configuration file "' . $configurationFile . '" ...');
+        $this->outputWithoutNewLine('Loading configuration file "' . $configurationFile . '" ...');
         try {
             $this->loadConfigurationFile($configurationFile);
         } catch(\Throwable $e) {
@@ -200,7 +200,7 @@ class RandomdataService
      */
     protected function generateItem($configurationKey, array $itemConfiguration)
     {
-        $this->outputWthoutNewLine('Generating data for item "' . $configurationKey . '" ...');
+        $this->outputWithoutNewLine('Generating data for item "' . $configurationKey . '" ...');
         try {
             $table = $this->getItemTable($configurationKey, $itemConfiguration);
             $pid = $this->getItemPid($configurationKey, $itemConfiguration);
@@ -507,7 +507,7 @@ class RandomdataService
         }
     }
 
-    protected function outputWthoutNewLine($message)
+    protected function outputWithoutNewLine($message)
     {
         if (!empty($this->output)) {
             $this->output->write($message);
