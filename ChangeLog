@@ -1,3 +1,6 @@
+2023-04-07 Rudy Gnodde <rudy@famouswolf.com>
+    * Replace deprecated Faker library with maintained fork
+
 2021-02-23 Rudy Gnodde <info@windinternet.nl>
     * Version 1.1.0
     * TYPO3 11 compatibility
